@@ -4,9 +4,9 @@ from django.views.generic import ListView
 def book_list(request):
       books = Book.objects.all()  
       context = {'book_list': books}  
-      return render(request, 'books/book_list.html', context)
+      return render(request, 'list_books.html', context)
 
 class BookListView(ListView):
   model = Book
-  template_name = 'book_list.html'
+  template_name = 'library_detail.html'
   context_object_name = 'books'
