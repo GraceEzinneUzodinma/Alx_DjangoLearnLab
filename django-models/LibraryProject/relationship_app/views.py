@@ -15,5 +15,5 @@ class LibraryDetailView(DetailView):
   template_name = 'relationship_app/library_detail.html'
   context_object_name = 'books'
 class SignUpView(CreateView):
-    form_class = UserCreationForm
+    form_class = UserCreationForm()
     template_name = 'relationship_app/register.html'
