@@ -43,7 +43,7 @@ def Member_view(request):
 def add_book(request):
     return HttpResponse("you have permission to add a book")
 @permission_required("relationship_app.can_change_book")
-def change_book(request):
+def edit_book(request):
     return HttpResponse("you have permission to change the book")
 @permission_required("relationship_app.can_delete_book")
 def delete_book(request):
