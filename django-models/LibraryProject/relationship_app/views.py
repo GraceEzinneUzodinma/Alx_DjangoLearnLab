@@ -35,4 +35,4 @@ def Member(user):
     return user.userprofile.role == 'Member'
 @user_passes_test(Member)
 def Member_view(request):
-    return render(request, "relationshp_app/member_view.html")
+    return render(request, "relationship_app/member_view.html")
