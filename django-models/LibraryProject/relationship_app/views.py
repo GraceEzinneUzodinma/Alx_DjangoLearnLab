@@ -6,6 +6,8 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import CreateView
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
+from django.http import HttpResponse
 def list_books(request):
       books = Book.objects.all()  
       context = {'book_list': books}  
@@ -36,3 +38,13 @@ def Member(user):
 @user_passes_test(Member)
 def Member_view(request):
     return render(request, "relationship_app/member_view.html")
+
+@permission_required("relationship_app.can_add_book")
+def add_book(request):
+    return HttpResponse("you have permission to add a book")
+@permission_required("relationship_app.can_change_book")
+def change_book(request):
+    return HttpResponse("you have permission to change the book")
+@permission_required("relationship_app.can_delete_book")
+def delete_book(request):
+    return HttpResponse("you have permission to delete a book")
