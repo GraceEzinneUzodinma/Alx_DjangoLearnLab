@@ -30,4 +30,11 @@ class CustomUser(AbstractUser):
     is_staff = models.BooleanField(default=False)
     is_superuser =models.BooleanField(default=False)
     objects = CustomUserManager()
+class Meta:
+    permissions  =[
+        ('can_view', 'can view'),
+        ('can_create', 'can create'),
+        ('can_edit', 'can edit'),
+        ('can_delete', 'can delete' ),
+    ]
 # Create your models here.
