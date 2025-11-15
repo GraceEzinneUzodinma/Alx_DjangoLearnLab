@@ -19,5 +19,5 @@ from django.urls import include, path
 from relationship_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('account.urls'))
+    path('', include('bookshelf.urls'))
 ]
