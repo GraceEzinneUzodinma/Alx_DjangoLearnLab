@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookshelf',
-    'relationship_app',
+    'csp',
 ]
 
 MIDDLEWARE = [
@@ -49,7 +49,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
+
+CSP_DEFAULT_SRC = ("'self'",)  # Only allow content from your own domain
+CSP_SCRIPT_SRC = ("'self'",)   # Only allow scripts from your own domain
+CSP_STYLE_SRC = ("'self'",) 
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
@@ -122,3 +127,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEBUG = False
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = "DENY"
+SECURE_CONTENT_TYPE_NOSNIFF = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True

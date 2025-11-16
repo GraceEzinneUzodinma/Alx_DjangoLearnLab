@@ -34,7 +34,7 @@ def create_book(request):
         Book.objects.create(title=title, author=author)
         return redirect('book_list')
 
-    return render(request, 'books/create_book.html')
+    return render(request, 'books/form_example.html')
 
 @permission_required('your_app.can_delete', raise_exception=True)
 def delete_book(request, book_id):
@@ -45,5 +45,5 @@ def delete_book(request, book_id):
 @permission_required('your_app.can_view', raise_exception=True)
 def list_users(request):
     users = CustomUser.objects.all()
-    return render(request, 'users/user_list.html', {'users': users})
+    return render(request, 'users/book_list.html', {'users': users})
 # Create your views here.
