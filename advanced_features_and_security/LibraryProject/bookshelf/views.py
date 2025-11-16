@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from .models import CustomUser, Book
 from django.contrib.auth.decorators import permission_required
-
+from .forms import ExampleForm
 
 def create_groups():
     # Get the content type for your custom user model
