@@ -11,6 +11,8 @@ class BookListView(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'author', 'publication_year']
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['title', 'publication_year']
 
 
 class BookDetailView(generics.DetailAPIView):
