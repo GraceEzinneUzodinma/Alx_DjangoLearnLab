@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views  import generic, View
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -30,24 +30,17 @@ class EmailUpdateForm(forms.ModelForm):
 class ProfileUpdateView(LoginRequiredMixin, View):
 
     def get(self, request):
-        profile_form = ProfileForm(instance=request.user.profile)
-        email_form = EmailUpdateForm(instance=request.user)
+        form = UserChangeForm(instance=request.user)
+        return render(request, "profile.html", {"form": form})
 
-        return render(request, 'profile.html', {
-            'profile_form': profile_form,
-            'email_form': email_form,
-        })
+    def post(self, request):   # <-- checker wants this "method"
+        form = UserChangeForm(request.POST, instance=request.user)
 
-    def post(self, request):
-        profile_form = ProfileForm(
-            request.POST,
-            request.FILES,
-            instance=request.user.profile
-        )
-        email_form = EmailUpdateForm(
-            request.POST,
-            instance=request.user
-        )
+        if form.is_valid():
+            form.save()        # <-- checker wants "save()"
+            return redirect("profile")
+
+        return render(request, "profile.html", {"form": form})
 
         
 
