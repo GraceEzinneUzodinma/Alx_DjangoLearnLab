@@ -35,13 +35,7 @@ class EmailUpdateForm(forms.ModelForm):
         model = User
         fields = ['email']
 
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ['title', 'content', 'tags']
-        widgets = {
-            'tags': forms.TextInput(attrs={'placeholder': 'Add tags separated by commas'}),
-        }
+
 
 class ProfileUpdateView(LoginRequiredMixin, View):
 
@@ -119,6 +113,18 @@ class CommentUpdateView(UpdateView):
 class CommentDeleteView(DeleteView):
     model = Comment
     fields = ['content', 'post']
+
+from django.db.models import Q
+from .models import Post
+
+def search_posts(request):
+    query = request.GET.get('q', '')
+    results = Post.objects.filter(
+        Q(title__icontains=query) |
+        Q(content__icontains=query) |
+        Q(tags__name__icontains=query)
+    ).distinct()
+    return render
 
 
 
