@@ -4,13 +4,14 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Post
+from .models import Post, Profile, Comment
 from .serializers import PostSerializer
 from rest_framework import generics, viewsets
 from django_filters import rest_framework as filters
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from django.contrib.auth.decorators import login_required , UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin , UserPassesTestMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -26,7 +27,7 @@ class UserRegisterView(generic.CreateView):
 
 class ProfileForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = Profile
         fields = ['bio', 'profile_picture']
 
 class EmailUpdateForm(forms.ModelForm):
@@ -90,6 +91,28 @@ class BlogDeleteView(LoginRequiredMixin, UserPassesTestMixin,generics.DestroyAPI
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
+    
+class CommentCreateView(CreateView):
+    model = Comment
+    fields = ['content']
+
+class CommentListView(ListView):
+    model = Comment
+    fields ='__all__'
+
+class CommentDetailView(DetailView):
+    model = Comment
+    fields = '__all__'
+
+class CommentUpdateView(UpdateView):
+    model = Comment
+    fields  = ['content', 'post']
+
+class CommentDeleteView(DeleteView):
+    model = Comment
+    fields = ['content', 'post']
+
+
 
 
         
