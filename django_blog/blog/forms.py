@@ -1,5 +1,6 @@
 from django import forms
-from .models import Comment
+from .models import Comment, Post
+from taggit.forms import TagWidget
 
 class CommentForm(forms.ModelForm):
     content = forms.CharField(
@@ -19,3 +20,11 @@ class CommentForm(forms.ModelForm):
         if "badword" in data.lower():  # example: prevent bad words
             raise forms.ValidationError("Please avoid using inappropriate language.")
         return data
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'tags']
+        widgets = {
+            'tags': TagWidget(attrs={'placeholder': 'Add tags separated by commas'}),
+        }
