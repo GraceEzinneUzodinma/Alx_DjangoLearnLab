@@ -35,6 +35,14 @@ class EmailUpdateForm(forms.ModelForm):
         model = User
         fields = ['email']
 
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'tags']
+        widgets = {
+            'tags': forms.TextInput(attrs={'placeholder': 'Add tags separated by commas'}),
+        }
+
 class ProfileUpdateView(LoginRequiredMixin, View):
 
     def get(self, request):
