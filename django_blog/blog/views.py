@@ -10,6 +10,7 @@ from rest_framework import generics, viewsets
 from django_filters import rest_framework as filters
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django.contrib.auth.decorators import login_required , UserPassesTestMixin
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -63,20 +64,33 @@ class BlogDetailView(generics.RetrieveAPIView):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-class BlogCreateView(generics.CreateAPIView):
+class BlogCreateView(LoginRequiredMixin,generics.CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    template_name = 'blog/creating_post.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user   # attach post to logged-in author
+        return super().form_valid(form)
+
+class BlogUpdateView(LoginRequiredMixin, UserPassesTestMixin,generics.UpdateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
-class BlogUpdateView(generics.UpdateAPIView):
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
+
+class BlogDeleteView(LoginRequiredMixin, UserPassesTestMixin,generics.DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
-class BlogDeleteView(generics.DestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
+
 
         
 
