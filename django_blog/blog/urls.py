@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import UserRegisterView, ProfileUpdateView, BlogCreateView,BlogDeleteView, BlogDetailView, BlogUpdateView, BlogListView
+from .views import UserRegisterView, ProfileUpdateView, BlogCreateView,BlogDeleteView, BlogDetailView, BlogUpdateView, BlogListView, CommentCreateView, CommentDeleteView, CommentUpdateView
 from django.contrib.auth import views as auth_views
 
 urlpatterns=[
@@ -14,4 +14,7 @@ urlpatterns=[
     path('post/<int:pk>/delete/', BlogDeleteView.as_view(), name='post-delete'),
     path('post/<int:pk>/update/', BlogUpdateView.as_view(), name='post-update'),
     path('post/list/', BlogListView.as_view(), name= 'post-list'),
+    path('comment/<int:pk>/update/',CommentUpdateView.as_view(), name= 'comment-update'),
+    path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name= 'new-comment'),
+    path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name = 'comment-delete'),
 ]
