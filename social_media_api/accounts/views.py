@@ -2,9 +2,11 @@ from django.shortcuts import render
 # accounts/views.py
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
+from .models import CustomUser
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import (
     UserRegistrationSerializer,
@@ -52,4 +54,21 @@ class TokenView(APIView):
         token, created = Token.objects.get_or_create(user=request.user)
         return Response({"token": token.key})
 
+class FollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        user = self.get_object()
+        request.user.following.add(user)
+        return Response({"detail": "Followed"})
+
+class UnfollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        user = self.get_object()
+        request.user.following.remove(user)
+        return Response({"detail": "Unfollowed"})
 # Create your views here.
